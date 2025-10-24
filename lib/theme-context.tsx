@@ -3,7 +3,7 @@
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 
-type Theme = "light" | "dark" | "blue" | "green"
+type Theme = "light" | "dark" | "blue" | "green" | "white-yellow" | "white-green"
 
 interface ThemeContextType {
   theme: Theme
@@ -32,7 +32,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const root = document.documentElement
 
     // Remove all theme classes
-    root.classList.remove("theme-light", "theme-dark", "theme-blue", "theme-green")
+    root.classList.remove(
+      "theme-light",
+      "theme-dark",
+      "theme-blue",
+      "theme-green",
+      "theme-white-yellow",
+      "theme-white-green",
+    )
 
     // Add new theme class
     root.classList.add(`theme-${newTheme}`)

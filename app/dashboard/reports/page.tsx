@@ -63,6 +63,20 @@ const activityLogs = [
     device: "All Devices",
     status: "completed",
   },
+  {
+    id: 9,
+    timestamp: new Date(Date.now() - 3 * 3600000),
+    action: "Current overload detected",
+    device: "Feeder Line 3",
+    status: "investigating",
+  },
+  {
+    id: 10,
+    timestamp: new Date(Date.now() - 12 * 3600000),
+    action: "Theft prevention alert",
+    device: "Substation C",
+    status: "resolved",
+  },
 ]
 
 export default function ReportsPage() {

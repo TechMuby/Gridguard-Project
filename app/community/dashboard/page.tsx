@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -10,6 +10,7 @@ export default function CommunityDashboard() {
   const [loginTime, setLoginTime] = useState<number | null>(null)
   const [showTheftAlert, setShowTheftAlert] = useState(false)
   const [gridStatus, setGridStatus] = useState("normal")
+  const audioRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {
     // Record login time
@@ -23,13 +24,40 @@ export default function CommunityDashboard() {
     const timer = setTimeout(() => {
       setShowTheftAlert(true)
       setGridStatus("critical")
+      // Play alert sound
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0
+        audioRef.current.play().catch(() => {
+          console.log("Audio notification could not be played")
+        })
+      }
     }, 60000)
 
     return () => clearTimeout(timer)
   }, [loginTime])
 
+  const createAlertSound = () => {
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+    const oscillator = audioContext.createOscillator()
+    const gainNode = audioContext.createGain()
+
+    oscillator.connect(gainNode)
+    gainNode.connect(audioContext.destination)
+
+    // Create a pulsing alert tone
+    oscillator.frequency.value = 800
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime)
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5)
+
+    oscillator.start(audioContext.currentTime)
+    oscillator.stop(audioContext.currentTime + 0.5)
+  }
+
   return (
     <div className="p-6 space-y-6 bg-background">
+      {/* Hidden audio element for alert sound */}
+      <audio ref={audioRef} onPlay={createAlertSound} preload="auto" />
+
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-foreground">Community Grid Monitor</h1>
@@ -37,10 +65,12 @@ export default function CommunityDashboard() {
       </div>
 
       {showTheftAlert && (
-        <Alert className="border-destructive/50 bg-destructive/10">
-          <AlertTriangle className="h-4 w-4 text-destructive" />
-          <AlertTitle className="text-destructive">CRITICAL: Theft Alert Detected!</AlertTitle>
-          <AlertDescription className="text-destructive/90 mt-2">
+        <Alert className="border-destructive/50 bg-destructive/10 relative overflow-hidden">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2">
+            <AlertTriangle className="h-6 w-6 text-destructive animate-pulse" />
+          </div>
+          <AlertTitle className="text-destructive ml-10 text-lg font-bold">CRITICAL: Theft Alert Detected!</AlertTitle>
+          <AlertDescription className="text-destructive/90 mt-2 ml-10">
             <p className="font-semibold mb-2">Transformer Tampering Detected at Local Substation</p>
             <p className="text-sm mb-3">
               Our sensors have detected unauthorized access and tampering at Transformer Unit T-047 in your area. This

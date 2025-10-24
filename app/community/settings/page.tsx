@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Bell, Lock, User, Zap, Palette } from "lucide-react"
+import { Bell, Lock, User, Palette } from "lucide-react"
 import { useTheme } from "@/lib/theme-context"
 
 const themeColors = [
@@ -15,7 +15,7 @@ const themeColors = [
   { id: "white-green", name: "White & Green", preview: "bg-white text-green-900 border-2 border-green-400" },
 ]
 
-function SettingsContent() {
+function CommunitySettingsContent() {
   const { theme, setTheme } = useTheme()
   const [activeTab, setActiveTab] = useState("account")
   const [mounted, setMounted] = useState(false)
@@ -30,7 +30,7 @@ function SettingsContent() {
     <div className="p-6 space-y-6 bg-background">
       <div>
         <h1 className="text-3xl font-bold text-foreground">Settings</h1>
-        <p className="text-muted-foreground mt-1">Manage your GridGuard account and preferences</p>
+        <p className="text-muted-foreground mt-1">Manage your community account and preferences</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -68,14 +68,6 @@ function SettingsContent() {
             <Lock className="w-4 h-4" />
             Security
           </Button>
-          <Button
-            variant={activeTab === "system" ? "default" : "ghost"}
-            className="w-full justify-start gap-2 text-foreground hover:bg-secondary/50"
-            onClick={() => setActiveTab("system")}
-          >
-            <Zap className="w-4 h-4" />
-            System
-          </Button>
         </div>
 
         {/* Settings Content */}
@@ -85,14 +77,14 @@ function SettingsContent() {
             <Card className="border-border/50">
               <CardHeader>
                 <CardTitle>Account Settings</CardTitle>
-                <CardDescription>Manage your account information</CardDescription>
+                <CardDescription>Manage your community account information</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-foreground">Organization Name</label>
+                  <label className="text-sm font-medium text-foreground">Full Name</label>
                   <input
                     type="text"
-                    placeholder="Your DISCO Name"
+                    placeholder="Your name"
                     className="w-full mt-2 px-3 py-2 bg-secondary/50 border border-border rounded-lg text-foreground"
                   />
                 </div>
@@ -100,7 +92,15 @@ function SettingsContent() {
                   <label className="text-sm font-medium text-foreground">Email</label>
                   <input
                     type="email"
-                    placeholder="admin@disco.com"
+                    placeholder="your.email@example.com"
+                    className="w-full mt-2 px-3 py-2 bg-secondary/50 border border-border rounded-lg text-foreground"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground">Phone Number</label>
+                  <input
+                    type="tel"
+                    placeholder="+234 XXX XXX XXXX"
                     className="w-full mt-2 px-3 py-2 bg-secondary/50 border border-border rounded-lg text-foreground"
                   />
                 </div>
@@ -120,23 +120,23 @@ function SettingsContent() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium text-foreground">Critical Alerts</p>
-                    <p className="text-sm text-muted-foreground">Tamper and theft detection</p>
+                    <p className="text-sm text-muted-foreground">Theft and tampering detection</p>
                   </div>
                   <input type="checkbox" defaultChecked className="w-4 h-4" />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-foreground">Warning Alerts</p>
-                    <p className="text-sm text-muted-foreground">Voltage and current anomalies</p>
+                    <p className="font-medium text-foreground">Power Outage Alerts</p>
+                    <p className="text-sm text-muted-foreground">Notifications about power disruptions</p>
                   </div>
                   <input type="checkbox" defaultChecked className="w-4 h-4" />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-foreground">Daily Reports</p>
-                    <p className="text-sm text-muted-foreground">Summary emails</p>
+                    <p className="font-medium text-foreground">Report Updates</p>
+                    <p className="text-sm text-muted-foreground">Updates on your submitted reports</p>
                   </div>
-                  <input type="checkbox" className="w-4 h-4" />
+                  <input type="checkbox" defaultChecked className="w-4 h-4" />
                 </div>
               </CardContent>
             </Card>
@@ -201,41 +201,12 @@ function SettingsContent() {
               </CardContent>
             </Card>
           )}
-
-          {/* System Settings */}
-          {activeTab === "system" && (
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle>System Settings</CardTitle>
-                <CardDescription>Configure monitoring parameters</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-foreground">Voltage Threshold (V)</label>
-                  <input
-                    type="number"
-                    placeholder="230"
-                    className="w-full mt-2 px-3 py-2 bg-secondary/50 border border-border rounded-lg text-foreground"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground">Current Threshold (A)</label>
-                  <input
-                    type="number"
-                    placeholder="100"
-                    className="w-full mt-2 px-3 py-2 bg-secondary/50 border border-border rounded-lg text-foreground"
-                  />
-                </div>
-                <Button className="bg-primary hover:bg-primary/90">Update Settings</Button>
-              </CardContent>
-            </Card>
-          )}
         </div>
       </div>
     </div>
   )
 }
 
-export default function SettingsPage() {
-  return <SettingsContent />
+export default function CommunitySettingsPage() {
+  return <CommunitySettingsContent />
 }
